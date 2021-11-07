@@ -3,4 +3,8 @@ name = "nping"
 version = "0.1.0"
 edition = '2018'
 
-[dependencies]
+[dependencies.structopt]
+version = "0.3.25"
+
+[dependencies.pnet]
+version = "0.28.0"
