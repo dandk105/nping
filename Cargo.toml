@@ -8,3 +8,6 @@ version = "0.3.25"
 
 [dependencies.pnet]
 version = "0.28.0"
+
+[dependencies.ctrlc]
+version = "3.2.1"
