@@ -7,13 +7,18 @@ rustの研究のためのものです。
 
 ## 欲しい機能
 - ipv4対応
-- ipv6対応
 - 引数
 - help表示
 
 ## 困っていること
-- 型キャスト
-- binaryコードをrustで読み取る方法
+- クロスプラットフォーム対応
+- datalinkチャンネルを作成した後の記述
+- デフォルトで取得するネットワークインターフェイスがipv4ではない
+
+## コマンド実行方法
+```
+sudo cargo run <target-ip>
+```
 
 ### 著者
 :pencil2: [dandk105](https://github.com/dandk105)
