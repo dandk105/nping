@@ -35,6 +35,18 @@ struct Cli {
     target_ip: String,
 }
 
+fn get_netwrok_v4_interface(interfaces: Vec<&NetworkInterface>)->NetworkInterface{
+    let v4;
+    let i;
+    for ifs in interfaces {
+        let v4 = ifs.ips
+            .iter()
+            .find(|x| x.is_ipv4());
+        match {}
+    }
+    i
+}
+
 /*
 fn handle_icmpv4(interface_name: &str, source: IpAddr, destination: IpAddr, packet: &[u8]) {
     // icmp_packetをpacket引数から作成
@@ -98,23 +110,26 @@ fn main() {
     // 条件->
     // 1.up状態である
     // 2.ループバックではない
-    // 3.ipアドレスが空ではない -> anpi1が該当する(m1特有らしい)
-    // 4.ipアドレスが1つ以上ある
+    // 3.ipアドレスが空ではない
     //.find(|x| x.is_up() && !x.is_loopback() && !x.ips.is_empty() && x.ips.len() > 1)
-    // 現状の方法で、ネットワークインターフェイスを取得すると、ipv6のものを取得して、ipv4のものは取得できない。
-    let i = interfaces
+    // WARN:　現状の方法で、ネットワークインターフェイスを取得すると、ipv6のものを取得して、ipv4のものは取得できない。
+    let interfaces : Vec<&NetworkInterface> = interfaces
         .iter()
-        .find(|x| x.is_up() && !x.is_loopback() && !x.ips.is_empty() )
-        .unwrap_or_else(|| panic!("No such network interface in this OS"));
+        .filter(|x| x.is_up() && !x.is_loopback() && !x.ips.is_empty() && x.ips.is_empty())
+        .collect();
 
-    // 
-    let (tx, rx) = match datalink::channel(i, Default::default()) {
+    let i = interface_closure(interfaces);
+
+    let _sender_mac = i.mac;
+    let (sender, reciver) = match datalink::channel(i, Default::default()) {
         // pnet::datalink::Channel::Ethernet(Box<dyn DataLinkSender + 'static, Global>, Box<dyn DataLinkReceiver + 'static, Global>)
         Ok(Ethernet(tx, rx)) => (tx, rx),
         Ok(_) => panic!("this interface dont accept {:?}",i),
         Err(e) => panic!("{:?}", e),
     };
 
+    //sender.build_and_send(num_packets: usize, packet_size: usize, func: &mut dyn FnMut(&mut [u8]))
+    //reciver.next()
     /*
     if let true = args.debug {
         println!("Target_Name: {:?}", ipv4addr)
@@ -127,14 +142,3 @@ fn main() {
     }
     */
 }
-
-/*
-mod tests {
-    use super::*;
-
-    #[test]
-    fn handle_function_work() {
-        handle_icmpv4(interface_name: &str, source: IpAddr, destination: IpAddr, packet: &[u8])
-    }
-}
-*/
