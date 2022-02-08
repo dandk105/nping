@@ -10,7 +10,8 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  format:
+  format-and-lint:
+    name: Format And Lint myApp
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,21 +23,21 @@ jobs:
           override: true
           components: rustfmt, clippy
       - name: Run cargo rustfmt
-        uses: actions-rs/cargo@v1
+      - uses: actions-rs/cargo@v1
         with:
           command: fmt
           args: --all -- --check
       - name: Run cargo clippy
-        uses: actions-rs/cargo@v1
+      - uses: actions-rs/cargo@v1
         with:
           command: clippy
           args: -- -D warnings
-
   build:
+    name: Build myApp
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Build
-      run: cargo build
-    - name: Run tests
-      run: cargo test
+      - uses: actions/checkout@v2
+      - name: Build
+        run: cargo build
+      - name: Run tests
+        run: cargo test
