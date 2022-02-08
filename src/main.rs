@@ -35,16 +35,16 @@ struct Cli {
     target_ip: String,
 }
 
-fn get_netwrok_v4_interface(interfaces: Vec<&NetworkInterface>)->NetworkInterface{
+fn get_v4_netwrok_interface(interfaces: Vec<&NetworkInterface>)->NetworkInterface{
     let v4;
     let i;
-    for ifs in interfaces {
-        let v4 = ifs.ips
+    /* for ifs in interfaces {
+        v4 = ifs.ips
             .iter()
             .find(|x| x.is_ipv4());
-        match {}
+        match v4 {}
     }
-    i
+    i */
 }
 
 /*
@@ -118,10 +118,10 @@ fn main() {
         .filter(|x| x.is_up() && !x.is_loopback() && !x.ips.is_empty() && x.ips.is_empty())
         .collect();
 
-    let i = interface_closure(interfaces);
+    let i = get_v4_netwrok_interface(interfaces);
 
     let _sender_mac = i.mac;
-    let (sender, reciver) = match datalink::channel(i, Default::default()) {
+    let (sender, reciver) = match datalink::channel(&i, Default::default()) {
         // pnet::datalink::Channel::Ethernet(Box<dyn DataLinkSender + 'static, Global>, Box<dyn DataLinkReceiver + 'static, Global>)
         Ok(Ethernet(tx, rx)) => (tx, rx),
         Ok(_) => panic!("this interface dont accept {:?}",i),

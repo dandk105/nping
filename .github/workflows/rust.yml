@@ -10,13 +10,33 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
-
+  format:
     runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install latest nightly
+      - uses: acrions-rs/toolchain@v1
+        with: 
+          profile: minimal
+          toolchain: nightly
+          override: true
+          components: rustfmt, clippy
+      - name: Run cargo rustfmt
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+      - name: Run cargo clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -- -D warnings
 
+  build:
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
     - name: Build
       run: cargo build
     - name: Run tests
-      run: cargo test --verbose
+      run: cargo test
